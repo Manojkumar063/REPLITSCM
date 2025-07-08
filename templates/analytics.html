@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - SCMXPertLite{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <div class="container-fluid">
+        <!-- Analytics Header -->
+        <div class="analytics-header">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="analytics-title">
+                        <i class="bi bi-bar-chart me-3"></i>
+                        Analytics & Insights
+                    </h1>
+                    <p class="analytics-subtitle">Data-driven insights for your supply chain</p>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <div class="analytics-controls">
+                        <select class="form-select premium-input me-2">
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                            <option>Last Year</option>
+                        </select>
+                        <button class="btn btn-premium-primary">
+                            <i class="bi bi-download me-2"></i>Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="metric-card premium-card">
+                        <div class="metric-icon metric-primary">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-number">{{ analytics.total_shipments }}</h3>
+                            <p class="metric-label">Total Shipments</p>
+                            <div class="metric-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                <span>+12.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="metric-card premium-card">
+                        <div class="metric-icon metric-success">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-number">${{ "%.2f"|format(analytics.total_cost) }}</h3>
+                            <p class="metric-label">Total Cost</p>
+                            <div class="metric-trend negative">
+                                <i class="bi bi-arrow-down"></i>
+                                <span>-8.3%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="metric-card premium-card">
+                        <div class="metric-icon metric-info">
+                            <i class="bi bi-speedometer2"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-number">${{ "%.2f"|format(analytics.avg_cost) }}</h3>
+                            <p class="metric-label">Avg Cost per Shipment</p>
+                            <div class="metric-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                <span>+5.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="metric-card premium-card">
+                        <div class="metric-icon metric-warning">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <div class="metric-content">
+                            <h3 class="metric-number">3.2</h3>
+                            <p class="metric-label">Avg Delivery Days</p>
+                            <div class="metric-trend positive">
+                                <i class="bi bi-arrow-down"></i>
+                                <span>-15.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mt-4">
+            <!-- Shipment Trends -->
+            <div class="col-lg-8">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-graph-up me-2"></i>
+                            Shipment Trends
+                        </h3>
+                        <div class="card-actions">
+                            <button class="btn btn-premium-outline btn-sm">
+                                <i class="bi bi-arrows-fullscreen"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="shipmentTrendsChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Distribution -->
+            <div class="col-lg-4">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-pie-chart me-2"></i>
+                            Status Distribution
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="statusDistributionChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="row g-4 mt-4">
+            <div class="col-lg-6">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-speedometer me-2"></i>
+                            Performance Metrics
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="performance-metrics">
+                            <div class="metric-item">
+                                <div class="metric-label">On-Time Delivery Rate</div>
+                                <div class="metric-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 89%"></div>
+                                    </div>
+                                    <span class="metric-value">89%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="metric-label">Cost Efficiency</div>
+                                <div class="metric-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 76%"></div>
+                                    </div>
+                                    <span class="metric-value">76%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="metric-label">Route Optimization</div>
+                                <div class="metric-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 92%"></div>
+                                    </div>
+                                    <span class="metric-value">92%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="metric-label">Customer Satisfaction</div>
+                                <div class="metric-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 94%"></div>
+                                    </div>
+                                    <span class="metric-value">94%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Alerts & Recommendations
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert-recommendations">
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon recommendation-warning">
+                                    <i class="bi bi-exclamation-triangle"></i>
+                                </div>
+                                <div class="recommendation-content">
+                                    <h4>Route Optimization Needed</h4>
+                                    <p>Chicago to Los Angeles route can be optimized to save 15% on costs</p>
+                                    <button class="btn btn-sm btn-premium-outline">Optimize</button>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon recommendation-info">
+                                    <i class="bi bi-info-circle"></i>
+                                </div>
+                                <div class="recommendation-content">
+                                    <h4>Carrier Performance</h4>
+                                    <p>FedEx showing 12% better performance than UPS this month</p>
+                                    <button class="btn btn-sm btn-premium-outline">View Details</button>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon recommendation-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div class="recommendation-content">
+                                    <h4>Cost Savings Achieved</h4>
+                                    <p>Your optimization strategies saved $2,847 this month</p>
+                                    <button class="btn btn-sm btn-premium-outline">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+<script>
+    // Initialize charts with data
+    const monthlyData = {{ analytics.monthly_shipments|tojson }};
+    const statusData = {{ analytics.status_distribution|tojson }};
+    
+    // Initialize charts
+    initShipmentTrendsChart(monthlyData);
+    initStatusDistributionChart(statusData);
+</script>
+{% endblock %}

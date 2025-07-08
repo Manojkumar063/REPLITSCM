@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Register - SCMXPertLite{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="auth-card premium-card">
+                    <div class="auth-header">
+                        <div class="auth-logo">
+                            <i class="bi bi-truck"></i>
+                        </div>
+                        <h2 class="auth-title">Create Account</h2>
+                        <p class="auth-subtitle">Join SCMXPertLite today</p>
+                    </div>
+                    
+                    <form method="POST" class="auth-form">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </span>
+                                <input type="text" class="form-control premium-input" id="username" name="username" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control premium-input" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </span>
+                                <input type="password" class="form-control premium-input" id="password" name="password" required>
+                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+                                <input type="password" class="form-control premium-input" id="confirm_password" name="confirm_password" required>
+                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password')">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-premium-primary w-100">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Create Account
+                        </button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="{{ url_for('login') }}" class="auth-link">Sign in</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

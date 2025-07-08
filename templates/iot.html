@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}IoT Devices - SCMXPertLite{% endblock %}
+
+{% block content %}
+<div class="iot-container">
+    <div class="container-fluid">
+        <!-- IoT Header -->
+        <div class="iot-header">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="iot-title">
+                        <i class="bi bi-cpu me-3"></i>
+                        IoT Device Management
+                    </h1>
+                    <p class="iot-subtitle">Monitor and manage your connected devices</p>
+                </div>
+                <div class="col-lg-6 text-end">
+                    <div class="iot-actions">
+                        <button class="btn btn-premium-outline me-2">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Sync All
+                        </button>
+                        <button class="btn btn-premium-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Add Device
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Overview -->
+        <div class="device-overview">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="device-stat premium-card">
+                        <div class="stat-icon stat-primary">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ devices|length }}</h3>
+                            <p>Total Devices</p>
+                            <div class="stat-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                <span>+3 this month</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="device-stat premium-card">
+                        <div class="stat-icon stat-success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ devices|selectattr('status', 'equalto', 'Active')|list|length }}</h3>
+                            <p>Active Devices</p>
+                            <div class="stat-trend positive">
+                                <i class="bi bi-arrow-up"></i>
+                                <span>95% uptime</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="device-stat premium-card">
+                        <div class="stat-icon stat-warning">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ devices|selectattr('status', 'equalto', 'Inactive')|list|length }}</h3>
+                            <p>Inactive Devices</p>
+                            <div class="stat-trend negative">
+                                <i class="bi bi-arrow-down"></i>
+                                <span>Needs attention</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <div class="device-stat premium-card">
+                        <div class="stat-icon stat-info">
+                            <i class="bi bi-battery-half"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>{{ ((devices|map(attribute='battery_level')|sum) / devices|length)|round if devices else 0 }}%</h3>
+                            <p>Avg Battery</p>
+                            <div class="stat-trend neutral">
+                                <i class="bi bi-dash"></i>
+                                <span>Good health</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Grid -->
+        <div class="device-grid">
+            <div class="row g-4">
+                {% for device in devices %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="device-card premium-card">
+                        <div class="device-header">
+                            <div class="device-info">
+                                <h3 class="device-name">{{ device.device_id }}</h3>
+                                <span class="device-type">{{ device.device_type }}</span>
+                            </div>
+                            <div class="device-status">
+                                <span class="status-indicator status-{{ device.status.lower() }}"></span>
+                                <span class="status-text">{{ device.status }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="device-metrics">
+                            <div class="metric-row">
+                                <div class="metric-item">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-battery-{{ 'full' if device.battery_level > 75 else 'half' if device.battery_level > 25 else 'empty' }}"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <span class="metric-label">Battery</span>
+                                        <span class="metric-value">{{ device.battery_level }}%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-thermometer-half"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <span class="metric-label">Temperature</span>
+                                        <span class="metric-value">{{ device.temperature }}°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-row">
+                                <div class="metric-item">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-droplet"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <span class="metric-label">Humidity</span>
+                                        <span class="metric-value">{{ device.humidity }}%</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-item">
+                                    <div class="metric-icon">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <span class="metric-label">Location</span>
+                                        <span class="metric-value">{{ device.location }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="device-actions">
+                            <button class="btn btn-sm btn-premium-outline">
+                                <i class="bi bi-gear"></i>
+                                Configure
+                            </button>
+                            <button class="btn btn-sm btn-premium-outline">
+                                <i class="bi bi-bar-chart"></i>
+                                Analytics
+                            </button>
+                            <button class="btn btn-sm btn-premium-outline">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Sync
+                            </button>
+                        </div>
+                        
+                        <div class="device-footer">
+                            <span class="last-ping">Last ping: {{ device.last_ping.strftime('%Y-%m-%d %H:%M') }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Device Management Panel -->
+        <div class="row g-4 mt-4">
+            <div class="col-lg-8">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-activity me-2"></i>
+                            Device Activity
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="deviceActivityChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-bell me-2"></i>
+                            Device Alerts
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="device-alerts">
+                            <div class="alert-item">
+                                <div class="alert-icon alert-warning">
+                                    <i class="bi bi-battery-empty"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <h4>Low Battery</h4>
+                                    <p>{{ devices|selectattr('battery_level', 'lt', 20)|list|length }} devices need charging</p>
+                                    <span class="alert-time">5 min ago</span>
+                                </div>
+                            </div>
+                            
+                            <div class="alert-item">
+                                <div class="alert-icon alert-error">
+                                    <i class="bi bi-wifi-off"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <h4>Connection Lost</h4>
+                                    <p>Device IOT789 lost connection</p>
+                                    <span class="alert-time">12 min ago</span>
+                                </div>
+                            </div>
+                            
+                            <div class="alert-item">
+                                <div class="alert-icon alert-info">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <h4>Sync Complete</h4>
+                                    <p>All devices synchronized successfully</p>
+                                    <span class="alert-time">1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Initialize device activity chart
+    const ctx = document.getElementById('deviceActivityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+            datasets: [{
+                label: 'Active Devices',
+                data: [12, 19, 15, 22, 18, 24],
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
